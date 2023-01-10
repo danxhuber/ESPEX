@@ -17,8 +17,8 @@ npoints=months*30*24*60*sampling
 # fraction of stars pulsating within instability region
 pulsfrac=0.5
 
-# Distribution of the strongest peak amplitudes of Kepler delta Scuti stars. This approximates
-# Fig 6a from https://arxiv.org/pdf/1903.00015.pdf
+# Distribution of the strongest peak amplitudes of Kepler delta Scuti stars in log10(amp/mmag). 
+# This approximates Fig 6a from https://arxiv.org/pdf/1903.00015.pdf
 def ampfunc(x):
 	x = -(x - 0) / 0.5
 	y = 100*np.exp(-x*x/2.0) 
@@ -32,7 +32,7 @@ np.random.seed(seed=88)
 # Table 2 from https://ui.adsabs.harvard.edu/abs/2021ApJ...917...23K/abstract 
 # crossmatched with Gaia DR3 astrophysical parameters
 # including expected noise levels from code by Luke Bouma
-dat=ascii.read('ymg-gaia-v2.csv')
+dat=ascii.read('ymg-gaia-table2.csv')
 
 # assign ages for each subpop. using Tables 4-6 from Kerr et al.
 ages=np.zeros(len(dat))
@@ -42,19 +42,21 @@ for j in range(0,len(files)):
 	ages_scocen=ascii.read(files[j])
 	ix=np.where(dat['TLC'] == ids[j])[0]
 	for i in np.unique(dat['EOM'][ix]):
-		print(i)
 		iy=np.where(ages_scocen['col1'] == i)[0]
 		iz=np.where(dat['EOM'][ix] == i)[0]
+		# if no subgroup assigned, draw random age over range of all ages for a given SFR
 		if i == -1:
 			ages[ix[iz]]=np.random.uniform(low=np.min(ages_scocen['col2']),high=np.max(ages_scocen['col2']),size=len(iz))
 		else:
 			if len(iy) > 1:
+			# if more than 1 subgroup assigned, draw random age over range of all ages for these subgroups
 				ages[ix[iz]]=np.random.uniform(low=np.min(ages_scocen['col2'][iy]),high=np.max(ages_scocen['col2'][iy]),size=len(iz))
 			else:
 				ages[ix[iz]]=ages_scocen['col2'][iy]
 		
 
 # adopt Gaia Teff for each star
+# teff_esphs > teff_gspspec > teff_gspspec
 teff=np.zeros(len(dat))
 for i in range(0,len(teff)):
 	if ((dat['teff_esphs'][i] > 0) & (np.isfinite(dat['teff_esphs'][i]))):
@@ -93,9 +95,13 @@ clas=np.zeros(len(dat))
 amp=np.arange(-3,2,0.01) 
 ampf=ampfunc(amp)
 
+#plt.clf()
+#plt.plot(amp,ampf)
+
+# loop over all stars
 for i in range(0,len(dat)):
 
-	# convert to ppm
+	# convert noise to ppm
 	noiseperminute=dat['noise'][i]*1e6
 
 	if ((teff[i] > spb_teff[0]) & (teff[i] < spb_teff[1])):
