@@ -11,8 +11,8 @@ lim=5.
 
 # assume 6 months of 1 minute sampling
 months=6
-sampling=1
-npoints=months*30*24*60*sampling
+sampling=10
+npoints=months*30*24*60/sampling
 
 # fraction of stars pulsating within instability region
 pulsfrac=0.5
@@ -102,19 +102,19 @@ ampf=ampfunc(amp)
 for i in range(0,len(dat)):
 
 	# convert noise to ppm
-	noiseperminute=dat['noise'][i]*1e6
+	noise=(dat['noise'][i]*1e6)/np.sqrt(sampling)
 
 	if ((teff[i] > spb_teff[0]) & (teff[i] < spb_teff[1])):
 		# draw amplitude
 		uamp = (10**np.random.choice(amp, p=ampf/np.sum(ampf)))*1e3
-		snr=uamp/(noiseperminute/np.sqrt(npoints))
+		snr=uamp/(noise/np.sqrt(npoints))
 		if (np.random.uniform(low=0,high=1) > pulsfrac):
 			clas[i]=1
 			snrs[i]=snr
 
 	if ((teff[i] > dsgd_teff[0]) & (teff[i] < dsgd_teff[1])):
 		uamp = (10**np.random.choice(amp, p=ampf/np.sum(ampf)))*1e3
-		snr=uamp/(noiseperminute/np.sqrt(npoints))
+		snr=uamp/(noise/np.sqrt(npoints))
 		if (np.random.uniform(low=0,high=1) > pulsfrac):
 			clas[i]=2
 			snrs[i]=snr
