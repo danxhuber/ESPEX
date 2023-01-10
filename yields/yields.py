@@ -116,6 +116,7 @@ for i in range(0,len(dat)):
 		if (np.random.uniform(low=0,high=1) > pulsfrac):
 			clas[i]=1
 			snrs[i]=snr
+		#print(teff[i],dat['tmag'][i],dat['noise'][i]*1e6,uamp,snr)
 
 	if ((teff[i] > dsgd_teff[0]) & (teff[i] < dsgd_teff[1])):
 		uamp = (10**np.random.choice(amp, p=ampf/np.sum(ampf)))*1e3
@@ -123,6 +124,7 @@ for i in range(0,len(dat)):
 		if (np.random.uniform(low=0,high=1) > pulsfrac):
 			clas[i]=2
 			snrs[i]=snr
+		
 
 	# not predicting solar-like stars and M dwarfs since pulsator fraction is uncertain
 	#if ((teff[i] > sl_teff[0]) & (teff[i] < sl_teff[1])):
@@ -135,11 +137,11 @@ for i in range(0,len(dat)):
 	#	clas[i]='md'
 	#	snrs[i]=snr
 		
-	if (snrs[i] > lim):
-		print('teff,tmag,noise(ppm),amp(ppm)')
-		print(teff[i],dat['tmag'][i],dat['noise'][i]*1e6,uamp,snr)
+	#if (snrs[i] > lim):
+		#print('teff,tmag,noise(ppm),amp(ppm)')
+		#print(teff[i],dat['tmag'][i],dat['noise'][i]*1e6,uamp,snr)
 		#print(dat[i])
-		print(' ')
+		#print(' ')
 	#input(':')
 
 
@@ -206,7 +208,7 @@ plt.xlabel('Age (Myr)')
 plt.ylabel('Number of Stars')
 plt.tight_layout()
 plt.legend()
-plt.yscale('log')
+#plt.yscale('log')
 
 plt.savefig('espex-seismo-yield-age.png',dpi=200)
 
