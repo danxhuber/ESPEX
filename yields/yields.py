@@ -11,7 +11,7 @@ lim=5.
 
 # assume 6 months of 1 minute sampling
 months=6
-sampling=10
+sampling=1
 npoints=months*30*24*60/sampling
 
 # fraction of stars pulsating within instability region
