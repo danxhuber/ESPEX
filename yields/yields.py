@@ -7,10 +7,10 @@ from astropy.io import ascii
 import pdb
 
 # SNR limit
-lim=5.
+lim=10.
 
-# assume 6 months of 1 minute sampling
-months=6
+# assume 12 months of 1 minute sampling
+months=12
 sampling=1
 npoints=months*30*24*60/sampling
 
@@ -89,6 +89,9 @@ spb_teff=10**np.array((4.1,4.3))
 sl_teff=10**np.array((3.75,3.8))
 md_teff=10**np.array((3.4,3.6))
 
+#dsgd_cycle=30/sampling
+#spb_cycle=12*60/sampling
+
 snrs=np.zeros(len(dat))
 clas=np.zeros(len(dat))
 
@@ -108,6 +111,8 @@ for i in range(0,len(dat)):
 		# draw amplitude
 		uamp = (10**np.random.choice(amp, p=ampf/np.sum(ampf)))*1e3
 		snr=uamp/(noise/np.sqrt(npoints))
+		#if (snr > 5):
+		#	pdb.set_trace()
 		if (np.random.uniform(low=0,high=1) > pulsfrac):
 			clas[i]=1
 			snrs[i]=snr
@@ -132,8 +137,7 @@ for i in range(0,len(dat)):
 		
 	if (snrs[i] > lim):
 		print('teff,tmag,noise(ppm),amp(ppm)')
-		print(teff[i],dat['tmag'][i],dat['noise'][i]*1e6,uamp)
-		print(clas[i],teff[i])
+		print(teff[i],dat['tmag'][i],dat['noise'][i]*1e6,uamp,snr)
 		#print(dat[i])
 		print(' ')
 	#input(':')
