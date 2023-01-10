@@ -3,7 +3,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import rc
 from astroquery.gaia import Gaia
-from astroquery.ipac.nexsci.nasa_exoplanet_archive import NasaExoplanetArchive
 from astropy.table import Table
 from itertools import chain
 from astroquery.mast import Catalogs 
@@ -312,9 +311,7 @@ for table in (tables):
 
 #@title Provide your Gaia archive user name
 username = 'dhuber' #@param {type:"string"}
-
 Gaia.login(user = username)
-#gehbitte6686$H
 
 Gaia.delete_user_table('ymg')
 Gaia.upload_table(upload_resource=ymg, table_name='ymg')
@@ -517,6 +514,7 @@ com=[' ']*len(xmk)
 ascii.write([ids,xmk['phot_bp_mean_mag'],pherr,xmk['phot_rp_mean_mag'],pherr,xmk['parallax']/1000,xmk['parallax_error']/1000,xmk['ra'],xmk['dec'],band,dust,com],'../isoclassify/input.csv',names=['id_starname','bpmag','bpmag_err','rpmag','rpmag_err','parallax','parallax_err','ra','dec','band','dust','comments'],delimiter=',',overwrite=True)
 '''
 
+'''
 plt.clf()
 
 plt.plot(ymg['teff_gspphot'],ymg['teff_gspphot']/ymg['teff_gspspec'],'.',label='teff_comp=teff_gspspec')
@@ -653,4 +651,4 @@ plt.legend()
 
 #plt.savefig('tois_gaiaDR3.png',dpi=200)
 
-
+'''
